@@ -66,7 +66,9 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         model = model.merge_and_unload()
 
         print('Model Loaded!!!')
-
+    if model_path=="":
+        
+        return processor, model
     else:
         with open(os.path.join(model_path, 'config.json'), 'r') as f:
             config = json.load(f)

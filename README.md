@@ -334,10 +334,11 @@ pip install gradio
 2. Launch app
 
 ```
-python -m src.serve.app \
-    --model-path /path/to/merged/weight
+python -m src.serve.app --model-path /home/jinchenhui/ustc/Qwen2-VL-Finetune/output/fft_7b_rec_conversation_42k_finetune/checkpoint-5320 --disable_flash_attention
+python -m src.serve.app --model-path /home/jinchenhui/ustc/Qwen2-VL-Finetune/output/fft_qwen25_3b_rec_merged/checkpoint-3600
+python -m src.serve.app --model-path /home/jinchenhui/ustc/Qwen2-VL-Finetune/output/lora-merged_qwen25_3b_rec_merged/checkpoint-11200
 ```
-
+Qwen/Qwen2.5-VL-7B-Instruct
 You can launch gradio based demo with this command. This can also set some other generation configs like `repetition_penalty`, `temperature` etc.
 
 ## TODO
@@ -361,7 +362,8 @@ This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE
 ## Citation
 
 If you find this repository useful in your project, please consider giving a :star: and citing:
-
+/home/jinchenhui/ustc/Qwen2-VL-Finetune/data/image/coco/train2017/000000139748.jpg
+Please provide a scene graph description for this region: <box>[[697, 408, 906, 642]]</box>.
 ```bibtex
 @misc{Qwen2-VL-Finetuning,
   author = {Yuwon Lee},
