@@ -228,3 +228,45 @@ class QwenTrainer(Trainer):
     #             print(f"Training parameter {name}")
     # 
     #     return super().training_step(model, inputs)
+
+    def training_step(self, model, inputs):
+        # 首先正常执行训练步骤
+        loss = super().training_step(model, inputs)
+        
+        # 每隔一定步数打印模型输出
+        if self.state.global_step % 100 == 0:  # 可以调整打印频率
+            # 提取输入
+            input_ids = inputs.get("input_ids")
+            attention_mask = inputs.get("attention_mask")
+            pixel_values = inputs.get("pixel_values", None)
+            
+            # 设置为评估模式并生成输出
+            model.eval()
+            with torch.no_grad():
+                if pixel_values is not None:  # 多模态输入
+                    outputs = model.generate(
+                        input_ids=input_ids[:1],  # 只使用批次中的第一个样本
+                        attention_mask=attention_mask[:1],
+                        pixel_values=pixel_values[:1] if pixel_values is not None else None,
+                        max_new_tokens=50,  # 生成的最大token数
+                    )
+                else:  # 纯文本输入
+                    outputs = model.generate(
+                        input_ids=input_ids[:1],
+                        attention_mask=attention_mask[:1],
+                        max_new_tokens=50,
+                    )
+                
+                # 解码并打印
+                input_text = self.processor.decode(input_ids[0], skip_special_tokens=True)
+                print(f"输入: {input_text}")
+                decoded_output = self.processor.decode(outputs[0], skip_special_tokens=False)
+                print(f"\n步骤 {self.state.global_step} 的模型输出示例:")
+                print("-" * 50)
+                print(decoded_output)
+                print("-" * 50)
+            
+            # 恢复为训练模式
+            model.train()
+        
+        return loss

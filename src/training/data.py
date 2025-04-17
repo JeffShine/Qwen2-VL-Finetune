@@ -326,10 +326,19 @@ def replace_image_tokens(input_string, is_video=False):
 
 def llava_to_openai(conversations, is_video=False):
     role_mapping = {"human": "user", "gpt": "assistant"}
+    
+    # 定义要替换的提示文本    
+    old_prompt = os.environ.get('OLD_PROMPT', "Provide a scene graph caption of the given image.")
+    new_prompt = os.environ.get('PROMPT_TEMPLATE', '')
 
     transformed_data = []
     for conversation in conversations:
         transformed_content = replace_image_tokens(conversation["value"], is_video=is_video)
+        
+        # 替换提示文本
+        if conversation["from"] == "human" and old_prompt in transformed_content:
+            transformed_content = transformed_content.replace(old_prompt, new_prompt)
+            
         transformed_entry = {
             "role": role_mapping.get(conversation["from"], conversation["from"]),
             "content": transformed_content,

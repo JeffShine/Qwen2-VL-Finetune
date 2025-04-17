@@ -14,7 +14,7 @@ GLOBAL_BATCH_SIZE=32
 BATCH_PER_DEVICE=8
 NUM_DEVICES=4
 GRAD_ACCUM_STEPS=$((GLOBAL_BATCH_SIZE / (BATCH_PER_DEVICE * NUM_DEVICES)))
-
+export OLD_PROMPT="Provide a scene graph caption of the given image."
 export PROMPT_TEMPLATE='''
 Task: Generate a detailed scene graph caption for the given image.
 
